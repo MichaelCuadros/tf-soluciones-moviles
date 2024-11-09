@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Alert, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, Alert, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { obtenerCuestionarios } from './services/cuestionarios';
 
 const ViewCuestionarios = () => {
   const [cuestionarios, setCuestionarios] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedAnswers, setSelectedAnswers] = useState({});
 
   useEffect(() => {
     const cargarCuestionarios = async () => {
@@ -21,12 +22,23 @@ const ViewCuestionarios = () => {
     cargarCuestionarios();
   }, []);
 
-  const renderRespuesta = (respuestas) => (
+  const handleSelectAnswer = (questionId, nroRespuesta) => {
+    setSelectedAnswers({ ...selectedAnswers, [questionId]: nroRespuesta });
+  };
+
+  const renderRespuesta = (respuestas, questionId) => (
     <View style={styles.respuestaContainer}>
-      {respuestas.map((respuesta, index) => (
-        <Text key={index} style={styles.respuestaText}>
-          {index + 1}. {respuesta.respuestaDescripcion}
-        </Text>
+      {respuestas.map((respuesta) => (
+        <TouchableOpacity
+          key={respuesta.nroRespuesta}
+          style={[
+            styles.respuestaButton,
+            selectedAnswers[questionId] === respuesta.nroRespuesta && styles.selectedButton,
+          ]}
+          onPress={() => handleSelectAnswer(questionId, respuesta.nroRespuesta)}
+        >
+          <Text style={styles.respuestaText}>{respuesta.respuestaDescripcion}</Text>
+        </TouchableOpacity>
       ))}
     </View>
   );
@@ -35,7 +47,7 @@ const ViewCuestionarios = () => {
     <View style={styles.item}>
       <Text style={styles.itemTitle}>{item.pregunta}</Text>
       <Text style={styles.itemDescription}>{item.preguntaDescripcion}</Text>
-      {renderRespuesta(item.respuesta)}
+      {renderRespuesta(item.respuesta, item.id)}
     </View>
   );
 
@@ -96,9 +108,19 @@ const styles = StyleSheet.create({
   respuestaContainer: {
     marginTop: 8,
   },
+  respuestaButton: {
+    backgroundColor: '#555',
+    color:'#666',
+    padding: 5,
+    borderRadius: 5,
+    marginVertical: 1,
+  },
+  selectedButton: {
+    backgroundColor: '#841584',
+  },
   respuestaText: {
     fontSize: 14,
-    color: '#333',
+    color: '#fff',
   },
 });
 
