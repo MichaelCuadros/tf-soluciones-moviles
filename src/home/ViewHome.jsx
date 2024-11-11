@@ -37,25 +37,30 @@ const ViewHome = ({ navigation }) => {
     navigation.navigate('Cuestionarios');
   };
 
+  const handlePuestosTrabajo = () => {
+    Alert.alert('Action', 'Puestos de trabajo pressed');
+    navigation.navigate('PuestosTrabajo'); // Navega a la pantalla PuestosTrabajo
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bienvenido a la Pantalla Principal</Text>
-      {token ? <Text style={styles.token}>Token: {token}</Text> : null}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleListQuestionnaires}>
-          <Text style={styles.buttonText}>Listar Cuestionarios</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => Alert.alert('Button 2 pressed')}>
-          <Text style={styles.buttonText}>Opción 2</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => Alert.alert('Button 3 pressed')}>
-          <Text style={styles.buttonText}>Opción 3</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.buttonText}>Cerrar Sesión</Text>
-        </TouchableOpacity>
-      </View>
+    <Text style={styles.title}>Bienvenido a la Pantalla Principal</Text>
+    {token ? <Text style={styles.token}>Token: {token}</Text> : <Text style={styles.token}>No token available</Text>}
+    <View style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.button} onPress={handleListQuestionnaires}>
+        <Text style={styles.buttonText}>Listar Cuestionarios</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handlePuestosTrabajo}>
+        <Text style={styles.buttonText}>Puestos de trabajo</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => Alert.alert('Button 3 pressed')}>
+        <Text style={styles.buttonText}>Opción 3</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.buttonText}>Cerrar Sesión</Text>
+      </TouchableOpacity>
     </View>
+  </View>
   );
 };
 

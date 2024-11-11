@@ -1,22 +1,22 @@
-// service/cuestionarios.js
+// service/puestos.js
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const obtenerCuestionarios = async () => {
+export const obtenerPuestos = async () => {
   try {
     // Obtener el token desde AsyncStorage
     const token = await AsyncStorage.getItem('authToken');
     if (!token) throw new Error('No token found');
 
-    const response = await fetch('http://161.132.55.177/apifundades/listaCuestionario', {
-      method: 'Get', // Cambia el método a POST
+    // Realizar la solicitud a la API
+    const response = await fetch('http://161.132.55.177/apifundades/listaPuestos', {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`, // Incluir token en el encabezado Authorization
+        'Authorization': `Bearer ${token}`, // Incluye el token de autenticación
       },
-     
     });
 
-    if (!response.ok) throw new Error('Failed to fetch questionnaires');
+    if (!response.ok) throw new Error('Failed to fetch puestos');
 
     const data = await response.json();
     return { success: true, data };

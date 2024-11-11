@@ -5,7 +5,7 @@ import ViewLogin from './src/auth/ViewLogin';
 import ViewRegister from './src/auth/ViewRegister';
 import ViewHome from './src/home/ViewHome';
 import ViewCuestionarios from './src/cuestionarios/ViewCuestionarios'; // Importa ViewCuestionarios
-
+import ViewPuestos from './src/puestos/ViewPuestos';
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -16,6 +16,7 @@ export default function App() {
         <Stack.Screen name="Register" component={ViewRegister} />
         <Stack.Screen name="Home" component={ViewHome} />
         <Stack.Screen name="Cuestionarios" component={ViewCuestionarios} />
+        <Stack.Screen name="PuestosTrabajo" component={ViewPuestos} />
       </Stack.Navigator>
     </NavigationContainer>
   );
