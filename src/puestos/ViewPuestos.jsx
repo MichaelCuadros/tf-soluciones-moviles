@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Alert, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { obtenerPuestos } from './services/Puestos';  // Importamos la función para obtener los puestos
+import { obtenerPuestos } from './services/Puestos';  
 
 const ViewPuestos = () => {
   const [puestos, setPuestos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPuesto, setSelectedPuesto] = useState(null);  // Estado para el puesto seleccionado
+  const [selectedPuesto, setSelectedPuesto] = useState(null);  
 
   useEffect(() => {
     const cargarPuestos = async () => {
@@ -23,7 +23,7 @@ const ViewPuestos = () => {
   }, []);
 
   const handleSelectPuesto = (puestoIndex) => {
-    setSelectedPuesto(puestoIndex);  // Actualizamos el índice del puesto seleccionado
+    setSelectedPuesto(puestoIndex);  
     
   };
 
@@ -31,9 +31,9 @@ const ViewPuestos = () => {
     <TouchableOpacity
       style={[
         styles.item,
-        selectedPuesto === index && styles.selectedItem,  // Verificamos si el índice coincide con el puesto seleccionado
+        selectedPuesto === index && styles.selectedItem, 
       ]}
-      onPress={() => handleSelectPuesto(index)}  // Usamos el índice para seleccionar el puesto
+      onPress={() => handleSelectPuesto(index)}  
     >
       <Text style={styles.itemTitle}>{item.nombrePuesto}</Text>
       <Text style={styles.itemDescription}>{item.descripcionPuesto}</Text>
@@ -48,13 +48,13 @@ const ViewPuestos = () => {
       ) : (
         <FlatList
           data={puestos}
-          keyExtractor={(item, index) => index.toString()}  // Usamos el índice como clave única
+          keyExtractor={(item, index) => index.toString()}  
           renderItem={renderPuesto}
           contentContainerStyle={styles.listContainer}
         />
       )}
       {selectedPuesto !== null && (
-        <Text style={styles.selectedText}>Puesto seleccionado: {puestos[selectedPuesto].nombrePuesto}</Text>  // Mostrar el nombre del puesto seleccionado
+        <Text style={styles.selectedText}>Puesto seleccionado: {puestos[selectedPuesto].nombrePuesto}</Text>  
       )}
     </View>
   );

@@ -12,7 +12,7 @@ export const obtenerPuestos = async () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`, // Incluye el token de autenticación
+        'Authorization': `Bearer ${token}`, 
       },
     });
 

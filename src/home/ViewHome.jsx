@@ -39,7 +39,7 @@ const ViewHome = ({ navigation }) => {
 
   const handlePuestosTrabajo = () => {
     Alert.alert('Action', 'Puestos de trabajo pressed');
-    navigation.navigate('PuestosTrabajo'); // Navega a la pantalla PuestosTrabajo
+    navigation.navigate('PuestosTrabajo'); 
   };
 
   return (
