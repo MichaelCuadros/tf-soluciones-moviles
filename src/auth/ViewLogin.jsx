@@ -9,33 +9,33 @@ export default function ViewLogin({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      // Realizar el login
+    
       const response = await loginUser({ username, password });
 
-      // Verificar respuesta del login
-      console.log('Respuesta de login:', response);  // Agregado para depurar
+    
+      console.log('Respuesta de login:', response);  
 
       if (response.success) {
         Alert.alert('Success', response.message);
 
-        // Guardar el usuario en AsyncStorage después del login exitoso
+    
         try {
-          // Ajustamos para utilizar el campo 'usuario' como identificador
-          const user = { username: response.data.token, name: username };  // Usamos 'username' como 'id'
-          await AsyncStorage.setItem('usuario', JSON.stringify(user)); // Guardamos el objeto de usuario en AsyncStorage
-          console.log("Usuario guardado:", user);  // Verificación
+         
+          const user = { username: response.data.token, name: username };  
+          await AsyncStorage.setItem('usuario', JSON.stringify(user)); 
+          console.log("Usuario guardado:", user);  
         } catch (error) {
-          console.error('Error al guardar el usuario en AsyncStorage:', error);  // Agregado para depurar
+          console.error('Error al guardar el usuario en AsyncStorage:', error);  
           Alert.alert('Error', 'No se pudo guardar el usuario');
         }
 
-        // Navegar a la pantalla principal después del login
+     
         navigation.navigate('Home');
       } else {
         Alert.alert('Error', response.message);
       }
     } catch (error) {
-      console.error('Error en el proceso de login:', error);  // Agregado para capturar errores generales
+      console.error('Error en el proceso de login:', error);  
       Alert.alert('Error', 'Hubo un problema al intentar iniciar sesión');
     }
   };
@@ -60,7 +60,7 @@ export default function ViewLogin({ navigation }) {
       <Button
         title="Go to Register"
         onPress={() => navigation.navigate('Register')}
-        color="#841584" // Personaliza el color del botón si es necesario
+        color="#841584" 
       />
     </View>
   );

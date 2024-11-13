@@ -22,14 +22,14 @@ const ViewPuestos = ({ navigation }) => {
   }, []);
 
   const handleSelectPuesto = (puesto) => {
-    // Navegar a Cuestionario y pasar el puesto seleccionado como parámetro
+   
     navigation.navigate('Cuestionarios', { puestoTrabajo: puesto });
   };
 
   const renderPuesto = ({ item }) => (
     <TouchableOpacity
       style={styles.item}
-      onPress={() => handleSelectPuesto(item)}  // Pasar el puesto completo
+      onPress={() => handleSelectPuesto(item)}  
     >
       <Text style={styles.itemTitle}>{item.nombrePuesto}</Text>
       <Text style={styles.itemDescription}>{item.descripcionPuesto}</Text>

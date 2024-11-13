@@ -4,7 +4,7 @@ import { obtenerCuestionarios, registrarCuestionario } from './services/cuestion
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ViewCuestionarios = ({ route }) => {
-  const { puestoTrabajo } = route.params; // Recibir el puestoTrabajo desde la navegación
+  const { puestoTrabajo } = route.params; 
   const [cuestionarios, setCuestionarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedAnswers, setSelectedAnswers] = useState({});

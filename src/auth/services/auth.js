@@ -1,4 +1,4 @@
-// service/auth.js
+
 import UserModel from '../models/user';
 import AuthModel from '../models/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -38,7 +38,7 @@ export const loginUser = async (formData) => {
     const result = await response.json();
     if (!response.ok) throw new Error(result.message || 'Login failed');
 
-    // Guarda el token en AsyncStorage
+
     await AsyncStorage.setItem('authToken', result.token);
 
     return { success: true, message: 'User logged in successfully', data: result };
