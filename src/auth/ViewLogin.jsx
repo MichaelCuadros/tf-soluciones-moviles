@@ -1,19 +1,42 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 import { loginUser } from './services/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ViewLogin({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-    const response = await loginUser({ username, password });
-    if (response.success) {
-      Alert.alert('Success', response.message);
-      // Navegar a la pantalla principal o a la deseada después del login
-      navigation.navigate('Home');
-    } else {
-      Alert.alert('Error', response.message);
+    try {
+      // Realizar el login
+      const response = await loginUser({ username, password });
+
+      // Verificar respuesta del login
+      console.log('Respuesta de login:', response);  // Agregado para depurar
+
+      if (response.success) {
+        Alert.alert('Success', response.message);
+
+        // Guardar el usuario en AsyncStorage después del login exitoso
+        try {
+          // Ajustamos para utilizar el campo 'usuario' como identificador
+          const user = { username: response.data.token, name: username };  // Usamos 'username' como 'id'
+          await AsyncStorage.setItem('usuario', JSON.stringify(user)); // Guardamos el objeto de usuario en AsyncStorage
+          console.log("Usuario guardado:", user);  // Verificación
+        } catch (error) {
+          console.error('Error al guardar el usuario en AsyncStorage:', error);  // Agregado para depurar
+          Alert.alert('Error', 'No se pudo guardar el usuario');
+        }
+
+        // Navegar a la pantalla principal después del login
+        navigation.navigate('Home');
+      } else {
+        Alert.alert('Error', response.message);
+      }
+    } catch (error) {
+      console.error('Error en el proceso de login:', error);  // Agregado para capturar errores generales
+      Alert.alert('Error', 'Hubo un problema al intentar iniciar sesión');
     }
   };
 

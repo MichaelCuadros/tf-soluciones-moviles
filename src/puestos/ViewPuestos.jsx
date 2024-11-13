@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Alert, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { obtenerPuestos } from './services/Puestos';  
+import { obtenerPuestos } from './services/Puestos';
 
-const ViewPuestos = () => {
+const ViewPuestos = ({ navigation }) => {
   const [puestos, setPuestos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPuesto, setSelectedPuesto] = useState(null);  
 
   useEffect(() => {
     const cargarPuestos = async () => {
@@ -22,18 +21,15 @@ const ViewPuestos = () => {
     cargarPuestos();
   }, []);
 
-  const handleSelectPuesto = (puestoIndex) => {
-    setSelectedPuesto(puestoIndex);  
-    
+  const handleSelectPuesto = (puesto) => {
+    // Navegar a Cuestionario y pasar el puesto seleccionado como parámetro
+    navigation.navigate('Cuestionarios', { puestoTrabajo: puesto });
   };
 
-  const renderPuesto = ({ item, index }) => (
+  const renderPuesto = ({ item }) => (
     <TouchableOpacity
-      style={[
-        styles.item,
-        selectedPuesto === index && styles.selectedItem, 
-      ]}
-      onPress={() => handleSelectPuesto(index)}  
+      style={styles.item}
+      onPress={() => handleSelectPuesto(item)}  // Pasar el puesto completo
     >
       <Text style={styles.itemTitle}>{item.nombrePuesto}</Text>
       <Text style={styles.itemDescription}>{item.descripcionPuesto}</Text>
@@ -48,13 +44,10 @@ const ViewPuestos = () => {
       ) : (
         <FlatList
           data={puestos}
-          keyExtractor={(item, index) => index.toString()}  
+          keyExtractor={(item, index) => index.toString()}
           renderItem={renderPuesto}
           contentContainerStyle={styles.listContainer}
         />
-      )}
-      {selectedPuesto !== null && (
-        <Text style={styles.selectedText}>Puesto seleccionado: {puestos[selectedPuesto].nombrePuesto}</Text>  
       )}
     </View>
   );
@@ -87,9 +80,6 @@ const styles = StyleSheet.create({
     shadowRadius: 1.5,
     elevation: 3,
   },
-  selectedItem: {
-    backgroundColor: 'black',  // parte seleccionada
-  },
   itemTitle: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -99,13 +89,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginTop: 8,
-  },
-  selectedText: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginTop: 20,
-    textAlign: 'center',
-    color: '#333',
   },
 });
 

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Alert, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { obtenerCuestionarios } from './services/cuestionarios';
+import { View, Text, FlatList, Alert, StyleSheet, ActivityIndicator, TouchableOpacity, Button } from 'react-native';
+import { obtenerCuestionarios, registrarCuestionario } from './services/cuestionarios'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ViewCuestionarios = () => {
+const ViewCuestionarios = ({ route }) => {
+  const { puestoTrabajo } = route.params; // Recibir el puestoTrabajo desde la navegación
   const [cuestionarios, setCuestionarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const cargarCuestionarios = async () => {
@@ -20,6 +23,22 @@ const ViewCuestionarios = () => {
     };
 
     cargarCuestionarios();
+  }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('usuario');
+        if (userData) {
+          const parsedUser = JSON.parse(userData);
+          setUser(parsedUser);
+        }
+      } catch (error) {
+        console.error('Error fetching user from AsyncStorage', error);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   const handleSelectAnswer = (questionId, nroRespuesta) => {
@@ -51,9 +70,70 @@ const ViewCuestionarios = () => {
     </View>
   );
 
+  const handleSubmit = async () => {
+    if (!user) {
+      Alert.alert('Error', 'Usuario no encontrado');
+      return;
+    }
+  
+    if (!puestoTrabajo || !puestoTrabajo.nombrePuesto) {
+      Alert.alert('Error', 'Información del puesto de trabajo no encontrada');
+      return;
+    }
+  
+    const respuestas = [];
+    for (const questionId of Object.keys(selectedAnswers)) {
+      const cuestionario = cuestionarios.find((item) => item.id.toString() === questionId);
+      if (!cuestionario) {
+        console.warn(`Pregunta con id ${questionId} no encontrada en cuestionarios.`);
+        continue;
+      }
+  
+      const respuesta = selectedAnswers[questionId];
+      if (respuesta === undefined) {
+        console.warn(`Respuesta para la pregunta con id ${questionId} no seleccionada.`);
+        continue;
+      }
+  
+      const tipoPregunta = cuestionario.id >= 1 && cuestionario.id <= 31 ? 'Puesto' : 'Trabajador';
+  
+      respuestas.push({
+        pregunta: cuestionario.pregunta,
+        tipoPregunta,
+        respuesta,
+      });
+    }
+  
+    if (respuestas.length === 0) {
+      Alert.alert('Error', 'No hay respuestas válidas para enviar.');
+      return;
+    }
+  
+    const data = {
+      usuario: user.name,
+      puesto: puestoTrabajo.nombrePuesto,
+      respuestas,
+    };
+  
+    console.log("Datos a enviar:", JSON.stringify(data, null, 2));
+  
+    try {
+      const result = await registrarCuestionario(data);
+      if (result.success) {
+        Alert.alert('Éxito', result.data.resultado || 'Cuestionario registrado correctamente');
+      } else {
+        Alert.alert('Error', result.message || 'Ocurrió un error al registrar el cuestionario');
+      }
+    } catch (error) {
+      console.error("Error al enviar el cuestionario:", error);
+      Alert.alert('Error', 'Error al enviar los datos al servidor');
+    }
+  };
+  
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Lista de Cuestionarios</Text>
+      <Text style={styles.title}>Cuestionarios para el puesto: {puestoTrabajo.nombrePuesto}</Text>
       {loading ? (
         <ActivityIndicator size="large" color="#841584" />
       ) : (
@@ -64,6 +144,7 @@ const ViewCuestionarios = () => {
           contentContainerStyle={styles.listContainer}
         />
       )}
+      <Button title="Enviar Cuestionario" onPress={handleSubmit} color="#841584" />
     </View>
   );
 };
