@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, Alert, TouchableOpacity, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ViewHome = ({ navigation }) => {
@@ -42,40 +42,50 @@ const ViewHome = ({ navigation }) => {
     navigation.navigate('PuestosTrabajo'); 
   };
 
+  const handleOpenURL = () => {
+    const url = 'https://fundades.org/';
+    Linking.openURL(url).catch(() => {
+      Alert.alert('Error', 'No se pudo abrir la URL');
+    });
+  };
+
   return (
     <View style={styles.container}>
-    <Text style={styles.title}>Bienvenido a la Pantalla Principal</Text>
-    {token ? <Text style={styles.token}>Token: {token}</Text> : <Text style={styles.token}>No token available</Text>}
-    <View style={styles.buttonContainer}>
-      <TouchableOpacity style={styles.button} onPress={handleListQuestionnaires}>
-        <Text style={styles.buttonText}>Listar Cuestionarios</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handlePuestosTrabajo}>
-        <Text style={styles.buttonText}>Puestos de trabajo</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => Alert.alert('Button 3 pressed')}>
-        <Text style={styles.buttonText}>Opción 3</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.buttonText}>Cerrar Sesión</Text>
-      </TouchableOpacity>
+      <Text style={styles.title}>Bienvenido a FUNDADES</Text>
+      <Text style={styles.subtitle}>Por un Perú más inclusivo</Text>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={handlePuestosTrabajo}>
+          <Text style={styles.buttonText}>Puestos de trabajo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleOpenURL}>
+          <Text style={styles.buttonText}>Ir a página</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.buttonText}>Cerrar Sesión</Text>
+        </TouchableOpacity>
+      </View>
     </View>
-  </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#e8f4f8', // Un tono suave de azul
     alignItems: 'center',
     padding: 20,
   },
   title: {
     fontSize: 28,
+    fontWeight: '700',
+    color: '#013a63', // Azul oscuro para destacar
+    marginVertical: 10,
+  },
+  subtitle: {
+    fontSize: 18,
+    color: '#fbb034', // Amarillo para reflejar el color de FUNDADES
     fontWeight: '600',
-    color: '#333',
-    marginVertical: 20,
+    marginBottom: 20,
   },
   token: {
     fontSize: 14,
@@ -90,7 +100,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: '#4a90e2',
+    backgroundColor: '#013a63', // Azul oscuro para los botones principales
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 8,

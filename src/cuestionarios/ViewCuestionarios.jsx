@@ -120,7 +120,11 @@ const ViewCuestionarios = ({ route }) => {
     try {
       const result = await registrarCuestionario(data);
       if (result.success) {
-        Alert.alert('Éxito', result.data.resultado || 'Cuestionario registrado correctamente');
+        const resultadoMensaje = result.data.resultado === "Aprobado"
+          ? "Cuestionario finalizado, por favor esté pendiente a siguientes exámenes."
+          : "Gracias por completar el cuestionario, lamentablemente no ha llegado al puntaje mínimo";
+        
+        Alert.alert('Éxito', resultadoMensaje);
       } else {
         Alert.alert('Error', result.message || 'Ocurrió un error al registrar el cuestionario');
       }
@@ -130,7 +134,6 @@ const ViewCuestionarios = ({ route }) => {
     }
   };
   
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Cuestionarios para el puesto: {puestoTrabajo.nombrePuesto}</Text>
@@ -144,7 +147,9 @@ const ViewCuestionarios = ({ route }) => {
           contentContainerStyle={styles.listContainer}
         />
       )}
-      <Button title="Enviar Cuestionario" onPress={handleSubmit} color="#841584" />
+      <View style={styles.buttonContainer}>
+        <Button title="Enviar Cuestionario" onPress={handleSubmit} color="#841584" />
+      </View>
     </View>
   );
 };
@@ -153,14 +158,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#e8f4f8', // Fondo azul claro
   },
   title: {
-    fontSize: 24,
-    fontWeight: '600',
+    fontSize: 28,
+    fontWeight: '700',
     marginBottom: 16,
     textAlign: 'center',
-    color: '#333',
+    color: '#013a63', // Azul oscuro
   },
   listContainer: {
     paddingBottom: 20,
@@ -169,20 +174,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     padding: 16,
     marginVertical: 8,
-    borderRadius: 8,
+    borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.5,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    borderLeftWidth: 5,
+    borderLeftColor: '#fbb034', // Resalta el borde con amarillo
   },
   itemTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#841584',
+    color: '#013a63', // Azul oscuro
   },
   itemDescription: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#666',
     marginBottom: 8,
   },
@@ -190,19 +197,23 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   respuestaButton: {
-    backgroundColor: '#555',
-    color:'#666',
-    padding: 5,
+    backgroundColor: '#013a63', // Azul oscuro para los botones
+    padding: 10,
     borderRadius: 5,
-    marginVertical: 1,
+    marginVertical: 4,
   },
   selectedButton: {
-    backgroundColor: '#841584',
+    backgroundColor: '#fbb034', // Amarillo para el botón seleccionado
   },
   respuestaText: {
     fontSize: 14,
-    color: '#fff',
+    color: '#ffffff',
+  },
+  buttonContainer: {
+    marginTop: 20,
+    paddingHorizontal: 20,
   },
 });
+
 
 export default ViewCuestionarios;

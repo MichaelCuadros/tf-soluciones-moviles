@@ -65,23 +65,27 @@ export default function ViewLogin({ navigation }) {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#e8f4f8', // Fondo azul claro
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 28, // Tamaño de fuente aumentado
+    fontWeight: '700', // Negrita
+    color: '#013a63', // Azul oscuro
+    marginBottom: 20, // Espacio debajo del título
   },
   input: {
     width: '80%',
-    padding: 10,
-    marginVertical: 10,
+    padding: 12, // Mayor padding para comodidad
+    marginVertical: 12, // Más espacio entre los inputs
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 8, // Bordes más redondeados
+    borderColor: '#fbb034', // Bordes amarillos
+    fontSize: 16, // Tamaño de fuente más grande
+    backgroundColor: '#fff', // Fondo blanco para el input
   },
 });

@@ -22,14 +22,13 @@ const ViewPuestos = ({ navigation }) => {
   }, []);
 
   const handleSelectPuesto = (puesto) => {
-   
     navigation.navigate('Cuestionarios', { puestoTrabajo: puesto });
   };
 
   const renderPuesto = ({ item }) => (
     <TouchableOpacity
       style={styles.item}
-      onPress={() => handleSelectPuesto(item)}  
+      onPress={() => handleSelectPuesto(item)}
     >
       <Text style={styles.itemTitle}>{item.nombrePuesto}</Text>
       <Text style={styles.itemDescription}>{item.descripcionPuesto}</Text>
@@ -40,7 +39,7 @@ const ViewPuestos = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Lista de Puestos</Text>
       {loading ? (
-        <ActivityIndicator size="large" color="#841584" />
+        <ActivityIndicator size="large" color="#013a63" />
       ) : (
         <FlatList
           data={puestos}
@@ -57,36 +56,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#e8f4f8', // Fondo azul claro
   },
   title: {
-    fontSize: 24,
-    fontWeight: '600',
+    fontSize: 28,
+    fontWeight: '700',
     marginBottom: 16,
     textAlign: 'center',
-    color: '#333',
+    color: '#013a63', // Azul oscuro
   },
   listContainer: {
     paddingBottom: 20,
   },
   item: {
     backgroundColor: '#ffffff',
-    padding: 16,
-    marginVertical: 8,
-    borderRadius: 8,
+    padding: 20,
+    marginVertical: 10,
+    borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.5,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    borderLeftWidth: 5,
+    borderLeftColor: '#fbb034', // Resalta el borde con amarillo
   },
   itemTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#841584',
+    color: '#013a63',
   },
   itemDescription: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#666',
     marginTop: 8,
   },

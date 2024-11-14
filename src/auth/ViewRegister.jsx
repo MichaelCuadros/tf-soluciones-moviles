@@ -21,6 +21,15 @@ const ViewRegister = () => {
     const result = await registerUser(formData);
     if (result.success) {
       Alert.alert('Success', result.message);
+      setFormData({
+        usuario: '',
+        password: '',
+        nombres: '',
+        apellidos: '',
+        email: '',
+        telefono: '',
+        rol: 1,
+      });
     } else {
       Alert.alert('Error', result.message);
     }
@@ -78,23 +87,26 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#e8f4f8', // Fondo azul claro
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 28, // Tamaño de fuente aumentado
+    fontWeight: '700', // Negrita
     marginBottom: 24,
     textAlign: 'center',
+    color: '#013a63', // Azul oscuro
   },
   input: {
     height: 40,
-    borderColor: '#ccc',
+    borderColor: '#fbb034', // Bordes amarillos
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
-    borderRadius: 4,
-    backgroundColor: '#fff',
+    borderRadius: 8, // Bordes más redondeados
+    backgroundColor: '#fff', // Fondo blanco para el input
+    fontSize: 16, // Tamaño de fuente más grande
   },
 });
+
 
 export default ViewRegister;
