@@ -9,33 +9,34 @@ export default function ViewLogin({ navigation }) {
 
   const handleLogin = async () => {
     try {
-    
       const response = await loginUser({ username, password });
 
-    
-      console.log('Respuesta de login:', response);  
+      console.log('Respuesta de login:', response);
 
       if (response.success) {
         Alert.alert('Success', response.message);
 
-    
         try {
-         
-          const user = { username: response.data.token, name: username };  
-          await AsyncStorage.setItem('usuario', JSON.stringify(user)); 
-          console.log("Usuario guardado:", user);  
+          // Aquí guardamos tanto el token, como el username y el rol
+          const user = { 
+            token: response.data.token, 
+            username: username,
+            rol: response.data.rol // Guardamos el rol
+          };
+          await AsyncStorage.setItem('usuario', JSON.stringify(user));
+          console.log("Usuario guardado:", user);
         } catch (error) {
-          console.error('Error al guardar el usuario en AsyncStorage:', error);  
+          console.error('Error al guardar el usuario en AsyncStorage:', error);
           Alert.alert('Error', 'No se pudo guardar el usuario');
         }
 
-     
+        // Navegar a la pantalla Home
         navigation.navigate('Home');
       } else {
         Alert.alert('Error', response.message);
       }
     } catch (error) {
-      console.error('Error en el proceso de login:', error);  
+      console.error('Error en el proceso de login:', error);
       Alert.alert('Error', 'Hubo un problema al intentar iniciar sesión');
     }
   };
@@ -60,32 +61,33 @@ export default function ViewLogin({ navigation }) {
       <Button
         title="Go to Register"
         onPress={() => navigation.navigate('Register')}
-        color="#841584" 
+        color="#841584"
       />
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e8f4f8', // Fondo azul claro
+    backgroundColor: '#e8f4f8',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
-    fontSize: 28, // Tamaño de fuente aumentado
-    fontWeight: '700', // Negrita
-    color: '#013a63', // Azul oscuro
-    marginBottom: 20, // Espacio debajo del título
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#013a63',
+    marginBottom: 20,
   },
   input: {
     width: '80%',
-    padding: 12, // Mayor padding para comodidad
-    marginVertical: 12, // Más espacio entre los inputs
+    padding: 12,
+    marginVertical: 12,
     borderWidth: 1,
-    borderRadius: 8, // Bordes más redondeados
-    borderColor: '#fbb034', // Bordes amarillos
-    fontSize: 16, // Tamaño de fuente más grande
-    backgroundColor: '#fff', // Fondo blanco para el input
+    borderRadius: 8,
+    borderColor: '#fbb034',
+    fontSize: 16,
+    backgroundColor: '#fff',
   },
 });

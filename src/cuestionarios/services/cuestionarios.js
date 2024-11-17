@@ -3,9 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const obtenerCuestionarios = async () => {
   try {
-  
     const token = await AsyncStorage.getItem('authToken');
     if (!token) throw new Error('No token found');
+    console.log('Token de autenticación:', token); // Agrega un log para verificar el token
 
     const response = await fetch('http://161.132.55.177/apifundades/listaCuestionario', {
       method: 'Get', 
@@ -13,7 +13,6 @@ export const obtenerCuestionarios = async () => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`, 
       },
-     
     });
 
     if (!response.ok) throw new Error('Failed to fetch questionnaires');

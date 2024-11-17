@@ -4,42 +4,54 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ViewHome = ({ navigation }) => {
   const [token, setToken] = useState('');
+  const [rol, setRol] = useState('');
 
   useEffect(() => {
-    const fetchToken = async () => {
+    const fetchUserData = async () => {
       try {
-        const storedToken = await AsyncStorage.getItem('authToken');
-        if (storedToken) {
-          setToken(storedToken);
+        const userData = await AsyncStorage.getItem('usuario');
+        if (userData) {
+          const parsedData = JSON.parse(userData);
+          setToken(parsedData.token);
+          setRol(parsedData.rol);
         } else {
-          Alert.alert('Error', 'No token found');
+          Alert.alert('Error', 'No se encontraron datos del usuario');
         }
       } catch (error) {
-        Alert.alert('Error', 'Failed to retrieve token');
+        Alert.alert('Error', 'No se pudieron recuperar los datos del usuario');
       }
     };
 
-    fetchToken();
+    fetchUserData();
   }, []);
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.removeItem('authToken');
-      Alert.alert('Logged out', 'You have been logged out');
+      await AsyncStorage.removeItem('usuario');
+      Alert.alert('Sesión cerrada', 'Has cerrado sesión exitosamente');
       navigation.replace('Login');
     } catch (error) {
-      Alert.alert('Error', 'Failed to log out');
+      Alert.alert('Error', 'No se pudo cerrar la sesión');
     }
   };
 
-  const handleListQuestionnaires = () => {
-    Alert.alert('Action', 'Listar Cuestionarios pressed');
-    navigation.navigate('Cuestionarios');
+  const handlePuestosTrabajo = () => {
+    navigation.navigate('PuestosTrabajo');
   };
 
-  const handlePuestosTrabajo = () => {
-    Alert.alert('Action', 'Puestos de trabajo pressed');
-    navigation.navigate('PuestosTrabajo'); 
+  const handlePuestosActivosAdmin = () => {
+    Alert.alert('Acción', 'Administración de Puestos Activos');
+    navigation.navigate('PuestosActivosAdmin');
+  };
+
+  const handlePuestosInactivosAdmin = () => {
+    Alert.alert('Acción', 'Administración de Puestos Inactivos');
+    navigation.navigate('PuestosInactivosAdmin');
+  };
+
+  const handlePostulantesxPuestos = () => {
+    Alert.alert('Acción', 'Ver Postulantes por Puestos');
+    navigation.navigate('PostulantesxPuestos');
   };
 
   const handleOpenURL = () => {
@@ -57,6 +69,19 @@ const ViewHome = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={handlePuestosTrabajo}>
           <Text style={styles.buttonText}>Puestos de trabajo</Text>
         </TouchableOpacity>
+        {rol === 'Admin' && (
+          <>
+            <TouchableOpacity style={styles.button} onPress={handlePuestosActivosAdmin}>
+              <Text style={styles.buttonText}>Administración de Puestos Activos</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handlePuestosInactivosAdmin}>
+              <Text style={styles.buttonText}>Administración de Puestos Inactivos</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handlePostulantesxPuestos}>
+              <Text style={styles.buttonText}>Ver Postulantes por Puestos</Text>
+            </TouchableOpacity>
+          </>
+        )}
         <TouchableOpacity style={styles.button} onPress={handleOpenURL}>
           <Text style={styles.buttonText}>Ir a página</Text>
         </TouchableOpacity>
@@ -71,28 +96,21 @@ const ViewHome = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e8f4f8', // Un tono suave de azul
+    backgroundColor: '#e8f4f8',
     alignItems: 'center',
     padding: 20,
   },
   title: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#013a63', // Azul oscuro para destacar
+    color: '#013a63',
     marginVertical: 10,
   },
   subtitle: {
     fontSize: 18,
-    color: '#fbb034', // Amarillo para reflejar el color de FUNDADES
+    color: '#fbb034',
     fontWeight: '600',
     marginBottom: 20,
-  },
-  token: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 20,
-    textAlign: 'center',
-    paddingHorizontal: 10,
   },
   buttonContainer: {
     width: '100%',
@@ -100,7 +118,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: '#013a63', // Azul oscuro para los botones principales
+    backgroundColor: '#013a63',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 8,

@@ -110,7 +110,7 @@ const ViewCuestionarios = ({ route }) => {
     }
   
     const data = {
-      usuario: user.name,
+      usuario: user.username,
       puesto: puestoTrabajo.nombrePuesto,
       respuestas,
     };
