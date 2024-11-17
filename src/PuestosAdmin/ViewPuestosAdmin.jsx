@@ -1,95 +1,95 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, FlatList, ActivityIndicator, TextInput, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { obtenerPuestos } from '../puestos/services/Puestos';
-import { createPuesto, deactivatePuesto } from './services/PuestosAdmin'; // Importa las funciones de crear y desactivar puestos
+import { createPuesto, deactivatePuesto } from './services/PuestosAdmin'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ViewPuestosAdmin = () => {
-  const [puestos, setPuestos] = useState([]);  // Estado para almacenar los puestos
-  const [loading, setLoading] = useState(true);  // Para manejar el estado de carga
-  const [error, setError] = useState(null);  // Para manejar errores
+  const [puestos, setPuestos] = useState([]);  
+  const [loading, setLoading] = useState(true);  
+  const [error, setError] = useState(null);  
 
-  const [nombrePuesto, setNombrePuesto] = useState('');  // Estado para el nombre del puesto
-  const [descripcionPuesto, setDescripcionPuesto] = useState('');  // Estado para la descripción del puesto
-  const [nombrePuestoDesactivar, setNombrePuestoDesactivar] = useState('');  // Estado para el nombre del puesto a desactivar
+  const [nombrePuesto, setNombrePuesto] = useState('');  
+  const [descripcionPuesto, setDescripcionPuesto] = useState('');  
+  const [nombrePuestoDesactivar, setNombrePuestoDesactivar] = useState('');  
 
-  // Obtener puestos al cargar el componente
+
   useEffect(() => {
     const fetchPuestos = async () => {
-      const result = await obtenerPuestos();  // Llamar a la función obtenerPuestos
+      const result = await obtenerPuestos();  
       if (result.success) {
-        setPuestos(result.data);  // Actualiza el estado con los puestos obtenidos
+        setPuestos(result.data); 
       } else {
-        setError(result.message);  // Si hay error, guarda el mensaje de error
+        setError(result.message); 
       }
-      setLoading(false);  // Finaliza el estado de carga
+      setLoading(false);  
     };
 
     fetchPuestos();
-  }, []);  // El useEffect se ejecuta solo una vez cuando el componente se monta
+  }, []); 
 
-  // Mostrar el mensaje de error si ocurre un problema al obtener los puestos
+ 
   const renderError = () => (
     <View style={styles.errorContainer}>
       <Text style={styles.errorText}>{error}</Text>
     </View>
   );
 
-  // Función para renderizar cada puesto en la lista como un botón
+
   const renderPuesto = ({ item }) => (
     <TouchableOpacity
       style={styles.item}
-      onPress={() => setNombrePuestoDesactivar(item.nombrePuesto)} // Al presionar el puesto, se establece en el campo de desactivación
+      onPress={() => setNombrePuestoDesactivar(item.nombrePuesto)}
     >
       <Text style={styles.itemTitle}>{item.nombrePuesto}</Text>
       <Text style={styles.itemDescription}>{item.descripcionPuesto}</Text>
     </TouchableOpacity>
   );
 
-  // Función para manejar la creación de un nuevo puesto
+  
   const handleCreatePuesto = async () => {
     if (!nombrePuesto || !descripcionPuesto) {
       Alert.alert('Error', 'Por favor complete todos los campos');
       return;
     }
   
-    const result = await createPuesto(nombrePuesto, descripcionPuesto); // Eliminar el token como argumento
+    const result = await createPuesto(nombrePuesto, descripcionPuesto); 
     if (result.success) {
       Alert.alert('Éxito', 'Puesto creado correctamente');
-      setNombrePuesto('');  // Limpiar el campo de nombre
-      setDescripcionPuesto('');  // Limpiar el campo de descripción
-      fetchPuestos();  // Volver a obtener los puestos actualizados
+      setNombrePuesto('');  
+      setDescripcionPuesto('');  
+      fetchPuestos();  
     } else {
       Alert.alert('Error', 'No se pudo crear el puesto');
     }
   };
 
-  // Función para manejar la desactivación de un puesto (por nombre)
+
   const handleDeactivatePuesto = async () => {
     if (!nombrePuestoDesactivar) {
       Alert.alert('Error', 'Por favor ingrese el nombre del puesto a desactivar');
       return;
     }
   
-    const token = await AsyncStorage.getItem('authToken');  // Obtener token de autenticación
+    const token = await AsyncStorage.getItem('authToken');  
     if (!token) {
       Alert.alert('Error', 'No se ha encontrado el token');
       return;
     }
   
     // Aquí se realiza la desactivación del puesto
-    const result = await deactivatePuesto(token, nombrePuestoDesactivar);  // Desactivar por nombre
+    const result = await deactivatePuesto(token, nombrePuestoDesactivar); 
     if (result.success) {
       Alert.alert('Éxito', 'Puesto desactivado correctamente');
-      setNombrePuestoDesactivar('');  // Limpiar campo de texto
-      fetchPuestos();  // Volver a obtener los puestos actualizados después de desactivar
+      setNombrePuestoDesactivar(''); 
+      fetchPuestos();
     } else {
       Alert.alert('Error', 'No se pudo desactivar el puesto');
     }
   };
   
 
-  // Si está cargando, mostramos un indicador de carga
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -98,7 +98,7 @@ const ViewPuestosAdmin = () => {
     );
   }
 
-  // Si ocurrió un error, mostramos el mensaje
+
   if (error) {
     return renderError();
   }
@@ -151,13 +151,13 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       padding: 20,
-      backgroundColor: '#e8f4f8', // Fondo azul claro
+      backgroundColor: '#e8f4f8', 
     },
     title: {
       fontSize: 24,
       fontWeight: 'bold',
       textAlign: 'center',
-      color: '#013a63', // Azul oscuro
+      color: '#013a63',
       marginBottom: 16,
     },
     formContainer: {
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
       shadowRadius: 4,
       elevation: 5,
       borderLeftWidth: 5,
-      borderLeftColor: '#fbb034', // Resalta el borde con amarillo
+      borderLeftColor: '#fbb034', 
     },
     itemTitle: {
       fontSize: 18,

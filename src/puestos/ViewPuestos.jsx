@@ -56,14 +56,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#e8f4f8', // Fondo azul claro
+    backgroundColor: '#e8f4f8', 
   },
   title: {
     fontSize: 28,
     fontWeight: '700',
     marginBottom: 16,
     textAlign: 'center',
-    color: '#013a63', // Azul oscuro
+    color: '#013a63', 
   },
   listContainer: {
     paddingBottom: 20,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     borderLeftWidth: 5,
-    borderLeftColor: '#fbb034', // Resalta el borde con amarillo
+    borderLeftColor: '#fbb034', 
   },
   itemTitle: {
     fontSize: 20,

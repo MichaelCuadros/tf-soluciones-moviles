@@ -1,8 +1,8 @@
-// /PuestosAdmin/services/PuestosA.js
+
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Función para obtener el token desde el almacenamiento local
+
 export const getToken = async () => {
   try {
     const token = await AsyncStorage.getItem('authToken');
@@ -10,11 +10,11 @@ export const getToken = async () => {
     return token;
   } catch (error) {
     console.error('Error al obtener el token:', error);
-    throw error; // Para que el caller pueda manejar el error
+    throw error; 
   }
 };
 
-// Función para crear un nuevo puesto
+
 export const createPuesto = async (nombrePuesto, descripcionPuesto) => {
   try {
     const token = await getToken();
@@ -39,7 +39,7 @@ export const createPuesto = async (nombrePuesto, descripcionPuesto) => {
   }
 };
 
-// Función para desactivar un puesto
+
 export const deactivatePuesto = async (token, puesto) => {
     try {
       const url = `http://161.132.55.177/apifundades/api/Puesto/desactivar?puesto=${puesto}`;

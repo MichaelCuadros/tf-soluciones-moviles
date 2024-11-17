@@ -23,7 +23,7 @@ const ViewPuestosInacAdmin = () => {
     const result = await activatePuesto(puesto);
     if (result.success) {
       alert('Puesto activado exitosamente');
-      // Vuelve a obtener la lista de puestos inactivos después de la activación
+
       const result = await getPuestosInactivos();
       setPuestosInactivos(result.data);
     } else {
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     marginVertical: 10,
-    paddingBottom: 20, // Añadido para espacio en la parte inferior al hacer scroll
+    paddingBottom: 20, 
   },
   item: {
     backgroundColor: '#ffffff',

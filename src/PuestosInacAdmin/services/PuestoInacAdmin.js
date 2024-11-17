@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Función para obtener el token desde el almacenamiento local
+
 export const getToken = async () => {
   try {
     const token = await AsyncStorage.getItem('authToken');
@@ -8,11 +8,11 @@ export const getToken = async () => {
     return token;
   } catch (error) {
     console.error('Error al obtener el token:', error);
-    throw error; // Para que el caller pueda manejar el error
+    throw error; 
   }
 };
 
-// Función para obtener los puestos inactivos
+
 export const getPuestosInactivos = async () => {
   try {
     const token = await getToken();
@@ -36,7 +36,7 @@ export const getPuestosInactivos = async () => {
   }
 };
 
-// Función para activar un puesto
+
 export const activatePuesto = async (puesto) => {
   try {
     const token = await getToken();
