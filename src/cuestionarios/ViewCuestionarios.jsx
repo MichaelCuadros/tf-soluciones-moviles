@@ -121,8 +121,8 @@ const ViewCuestionarios = ({ route }) => {
       const result = await registrarCuestionario(data);
       if (result.success) {
         const resultadoMensaje = result.data.resultado === "Aprobado"
-          ? "Cuestionario finalizado, por favor esté pendiente a siguientes exámenes."
-          : "Gracias por completar el cuestionario, lamentablemente no ha llegado al puntaje mínimo";
+          ? "Gracias por completar el cuestionario. Atento a tu correo"
+          : "Gracias por completar el cuestionario. Atento a tu correo";
         
         Alert.alert('Éxito', resultadoMensaje);
       } else {

@@ -1,40 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, ActivityIndicator, TextInput, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
-import { obtenerPuestos } from '../puestos/services/Puestos';
-import { createPuesto, deactivatePuesto } from './services/PuestosAdmin'; 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect } from "react";
+import {
+  Text,
+  View,
+  FlatList,
+  ActivityIndicator,
+  TextInput,
+  Button,
+  Alert,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import { obtenerPuestos } from "../puestos/services/Puestos";
+import { createPuesto, deactivatePuesto } from "./services/PuestosAdmin";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ViewPuestosAdmin = () => {
-  const [puestos, setPuestos] = useState([]);  
-  const [loading, setLoading] = useState(true);  
-  const [error, setError] = useState(null);  
+  const [puestos, setPuestos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [nombrePuesto, setNombrePuesto] = useState('');  
-  const [descripcionPuesto, setDescripcionPuesto] = useState('');  
-  const [nombrePuestoDesactivar, setNombrePuestoDesactivar] = useState('');  
+  const [nombrePuesto, setNombrePuesto] = useState("");
+  const [descripcionPuesto, setDescripcionPuesto] = useState("");
+  const [nombrePuestoDesactivar, setNombrePuestoDesactivar] = useState("");
 
+  const fetchPuestos = async () => {
+    const result = await obtenerPuestos();
+    if (result.success) {
+      setPuestos(result.data);
+    } else {
+      setError(result.message);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchPuestos = async () => {
-      const result = await obtenerPuestos();  
-      if (result.success) {
-        setPuestos(result.data); 
-      } else {
-        setError(result.message); 
-      }
-      setLoading(false);  
-    };
-
     fetchPuestos();
-  }, []); 
+  }, []);
 
- 
   const renderError = () => (
     <View style={styles.errorContainer}>
       <Text style={styles.errorText}>{error}</Text>
     </View>
   );
-
 
   const renderPuesto = ({ item }) => (
     <TouchableOpacity
@@ -46,49 +53,48 @@ const ViewPuestosAdmin = () => {
     </TouchableOpacity>
   );
 
-  
   const handleCreatePuesto = async () => {
     if (!nombrePuesto || !descripcionPuesto) {
-      Alert.alert('Error', 'Por favor complete todos los campos');
+      Alert.alert("Error", "Por favor complete todos los campos");
       return;
     }
-  
-    const result = await createPuesto(nombrePuesto, descripcionPuesto); 
+
+    const result = await createPuesto(nombrePuesto, descripcionPuesto);
     if (result.success) {
-      Alert.alert('Éxito', 'Puesto creado correctamente');
-      setNombrePuesto('');  
-      setDescripcionPuesto('');  
-      fetchPuestos();  
+      Alert.alert("Éxito", "Puesto creado correctamente");
+      setNombrePuesto("");
+      setDescripcionPuesto("");
+      fetchPuestos();
     } else {
-      Alert.alert('Error', 'No se pudo crear el puesto');
+      Alert.alert("Error", "No se pudo crear el puesto");
     }
   };
-
 
   const handleDeactivatePuesto = async () => {
     if (!nombrePuestoDesactivar) {
-      Alert.alert('Error', 'Por favor ingrese el nombre del puesto a desactivar');
+      Alert.alert(
+        "Error",
+        "Por favor ingrese el nombre del puesto a desactivar"
+      );
       return;
     }
-  
-    const token = await AsyncStorage.getItem('authToken');  
+
+    const token = await AsyncStorage.getItem("authToken");
     if (!token) {
-      Alert.alert('Error', 'No se ha encontrado el token');
+      Alert.alert("Error", "No se ha encontrado el token");
       return;
     }
-  
+
     // Aquí se realiza la desactivación del puesto
-    const result = await deactivatePuesto(token, nombrePuestoDesactivar); 
+    const result = await deactivatePuesto(token, nombrePuestoDesactivar);
     if (result.success) {
-      Alert.alert('Éxito', 'Puesto desactivado correctamente');
-      setNombrePuestoDesactivar(''); 
+      Alert.alert("Éxito", "Puesto desactivado correctamente");
+      setNombrePuestoDesactivar("");
       fetchPuestos();
     } else {
-      Alert.alert('Error', 'No se pudo desactivar el puesto');
+      Alert.alert("Error", "No se pudo desactivar el puesto");
     }
   };
-  
-
 
   if (loading) {
     return (
@@ -97,7 +103,6 @@ const ViewPuestosAdmin = () => {
       </View>
     );
   }
-
 
   if (error) {
     return renderError();
@@ -115,12 +120,15 @@ const ViewPuestosAdmin = () => {
           value={nombrePuesto}
           onChangeText={setNombrePuesto}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Descripción del puesto"
-          value={descripcionPuesto}
-          onChangeText={setDescripcionPuesto}
-        />
+<TextInput
+  style={[styles.input, styles.textArea]} // Agregado estilo para área de texto
+  placeholder="Descripción del puesto"
+  value={descripcionPuesto}
+  onChangeText={setDescripcionPuesto}
+  multiline={true} // Permitir múltiples líneas
+  numberOfLines={4} // Número inicial de líneas
+/>
+
         <Button title="Crear Puesto" onPress={handleCreatePuesto} />
       </View>
 
@@ -148,69 +156,73 @@ const ViewPuestosAdmin = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 20,
-      backgroundColor: '#e8f4f8', 
-    },
-    title: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      textAlign: 'center',
-      color: '#013a63',
-      marginBottom: 16,
-    },
-    formContainer: {
-      marginVertical: 10,
-    },
-    input: {
-      borderWidth: 1,
-      borderColor: '#ccc',
-      padding: 10,
-      marginBottom: 10,
-      borderRadius: 5,
-    },
-    listTitle: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      marginVertical: 10,
-    },
-    item: {
-      backgroundColor: '#ffffff',
-      padding: 20,
-      marginVertical: 10,
-      borderRadius: 10,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-      borderLeftWidth: 5,
-      borderLeftColor: '#fbb034', 
-    },
-    itemTitle: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: '#013a63',
-    },
-    itemDescription: {
-      fontSize: 16,
-      color: '#666',
-      marginTop: 8,
-    },
-    loadingContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    errorContainer: {
-      padding: 20,
-      backgroundColor: 'lightcoral',
-    },
-    errorText: {
-      color: 'white',
-    },
-  });
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#e8f4f8",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#013a63",
+    marginBottom: 16,
+  },
+  formContainer: {
+    marginVertical: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  textArea: {
+    height: 100, // Altura mayor para la caja
+    textAlignVertical: "top", // Asegurar que el texto comience en la parte superior
+  },
   
+  listTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginVertical: 10,
+  },
+  item: {
+    backgroundColor: "#ffffff",
+    padding: 20,
+    marginVertical: 10,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    borderLeftWidth: 5,
+    borderLeftColor: "#fbb034",
+  },
+  itemTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#013a63",
+  },
+  itemDescription: {
+    fontSize: 16,
+    color: "#666",
+    marginTop: 8,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorContainer: {
+    padding: 20,
+    backgroundColor: "lightcoral",
+  },
+  errorText: {
+    color: "white",
+  },
+});
 
 export default ViewPuestosAdmin;

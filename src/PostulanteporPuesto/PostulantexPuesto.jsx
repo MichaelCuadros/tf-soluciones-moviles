@@ -86,6 +86,7 @@ const ViewPostulantesxPuestos = () => {
               <View key={index} style={styles.item}>
                 <Text style={styles.itemTitle}>{postulante.usuario}</Text>
                 <Text style={styles.itemDescription}>{postulante.resultdo}</Text>
+                <Text style={styles.itemDescription}>{postulante.email}</Text>
               </View>
             ))
           ) : (

@@ -38,8 +38,10 @@ export const loginUser = async (formData) => {
     const result = await response.json();
     if (!response.ok) throw new Error(result.message || 'Login failed');
 
-
+    // Guardar el token, el rol y el usuario en AsyncStorage
     await AsyncStorage.setItem('authToken', result.token);
+    await AsyncStorage.setItem('rolAPP', result.rol);
+    await AsyncStorage.setItem('username', authData.username); // Guardar el usuario
 
     return { success: true, message: 'User logged in successfully', data: result };
   } catch (error) {
